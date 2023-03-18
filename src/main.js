@@ -1,13 +1,14 @@
 import {renderTemplate,  RenderPosition} from './render';
-import {createAvatarTemplate} from './view/avatar-view';
-import {createNavigationList} from './view/navigation-list-view';
-import {createNavigationItemsTemplate} from './view/navigation-item-view';
-import {createNavigationItemStat} from './view/navigation-item-stats-view';
-import {sortListTemplate} from './view/sort-list-view';
-import {filmsTemplate} from './view/films-view';
-import {filmsListTemplate} from './view/films-list-view';
-import {createFilmCardTemplate} from './view/film-card-view';
-import {showMoreBtnTemplate} from './view/show-more-view';
+import {renderElement} from './render';
+import AvatarmenuView from './view/avatar-view';
+import NavigationList from './view/navigation-list-view';
+import NavigationItemsTemplate from './view/navigation-item-view';
+import NavigationItemStat from './view/navigation-item-stats-view';
+import SortList from './view/sort-list-view';
+import filmsView from './view/films-view';
+import FilmsListView from './view/films-list-view';
+import FilmCardView from './view/film-card-view';
+import showMoreBtnView from './view/show-more-view';
 import {topRatedTemplate} from './view/top-rated-view';
 import {mostCommentedTemplate} from './view/most-commented-view';
 import {footerStatisticTemplate} from './view/footer-statistic-view';
@@ -46,35 +47,37 @@ const commentEmoji = ['smile','sleeping','puke','angry'];
 const countExtra = 2;
 // const countComments = 4;
 const siteHeaderElement = document.querySelector('.header');
-renderTemplate(siteHeaderElement, createAvatarTemplate(), RenderPosition.BEFOREEND);
+renderElement(siteHeaderElement, new AvatarmenuView().element, RenderPosition.BEFOREEND);
 const siteMeinElement = document.querySelector('.main');
-renderTemplate(siteMeinElement, createNavigationList(), RenderPosition.BEFOREEND);
+renderElement(siteMeinElement, new NavigationList().element, RenderPosition.BEFOREEND);
 const siteNavigationList = siteMeinElement.querySelector('.main-navigation');
-renderTemplate(siteNavigationList, createNavigationItemsTemplate(filterDate), RenderPosition.BEFOREEND);
-renderTemplate(siteNavigationList, createNavigationItemStat(), RenderPosition.BEFOREEND);
-renderTemplate(siteMeinElement, sortListTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(siteMeinElement, filmsTemplate(), RenderPosition.BEFOREEND);
+renderElement(siteNavigationList, new NavigationItemsTemplate(filterDate).element, RenderPosition.BEFOREEND);
+renderElement(siteNavigationList, new NavigationItemStat().element, RenderPosition.BEFOREEND);
+renderElement(siteMeinElement, new SortList().element, RenderPosition.BEFOREEND);
+renderElement(siteMeinElement, new filmsView().element, RenderPosition.BEFOREEND);
 const siteFilmsContainer = siteMeinElement.querySelector('.films');
-renderTemplate(siteFilmsContainer, filmsListTemplate(), RenderPosition.BEFOREEND);
+renderElement(siteFilmsContainer, new FilmsListView().element, RenderPosition.BEFOREEND);
 const filmsListContainer  = siteMeinElement.querySelector('.films-list__container');
 
 for(let i = 0; i < Math.min(movie.length, MOVIE_COUNT_PER_STEP); i++) {
-  renderTemplate(filmsListContainer, createFilmCardTemplate(movie[i]), RenderPosition.BEFOREEND);
+  renderElement(filmsListContainer, new FilmCardView(movie[i]).element, RenderPosition.BEFOREEND);
 }
 const siteFilmList = siteFilmsContainer.querySelector('.films-list');
 if(movie.length > MOVIE_COUNT_PER_STEP) {
   let renderedMovieCount = MOVIE_COUNT_PER_STEP;
-  renderTemplate(siteFilmList, showMoreBtnTemplate(), RenderPosition.BEFOREEND);
+  const showMoreBtn = new showMoreBtnView();
+  renderElement(siteFilmList, showMoreBtn.element, RenderPosition.BEFOREEND);
   const loadMoreButton = siteFilmList.querySelector('.films-list__show-more');
 
   loadMoreButton.addEventListener('click', (evt) => {
     evt.preventDefault();
     movie
       .slice(renderedMovieCount, renderedMovieCount + MOVIE_COUNT_PER_STEP)
-      .forEach((movieItem) => renderTemplate(filmsListContainer, createFilmCardTemplate(movieItem), RenderPosition.BEFOREEND));
+      .forEach((movieItem) => renderElement(filmsListContainer, new FilmCardView(movieItem).element, RenderPosition.BEFOREEND));
     renderedMovieCount += MOVIE_COUNT_PER_STEP;
     if(renderedMovieCount >= movie.length) {
-      loadMoreButton.remove();
+      showMoreBtn.element.remove();
+      showMoreBtn.removeElement();
     }
   });
 }
@@ -86,7 +89,7 @@ const filmsListExtra = siteFilmsContainer.querySelectorAll('.films-list--extra')
 for(const element of filmsListExtra ) {
   const extraContainer = element.querySelector('.films-list__container');
   for(let i = 0; i < countExtra; i++) {
-    renderTemplate(extraContainer, createFilmCardTemplate(movie[i]), RenderPosition.BEFOREEND);
+    renderElement(extraContainer, new FilmCardView(movie[i]).element, RenderPosition.BEFOREEND);
   }
 }
 const footer = document.querySelector('.footer');
@@ -123,3 +126,4 @@ const emojiList = filmDetailsNewComment.querySelector('.film-details__emoji-list
 for(let i = 0; i < commentEmoji.length; i++) {
   renderTemplate(emojiList, createCommentEmojiTemplate(commentEmoji[i]), RenderPosition.BEFOREEND);
 }
+

@@ -1,8 +1,35 @@
-export const createNavigationItemsTemplate = () =>(
-  ` <div class="main-navigation__items">
-      <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-      <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">13</span></a>
-      <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">4</span></a>
-      <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">8</span></a>
-    </div>`
-);
+import {createElement} from '../render.js';
+const createNavigationItemTemplateElem = (filterDate, isChecked) => {
+  const {name, count} = filterDate;
+  return (
+    `<a href="#${name}" class="main-navigation__item ${isChecked ? 'main-navigation__item--active' : ''}">${name} ${count !==''?`<span class="main-navigation__item-count">${count}</span>`: ''}</a>`
+  );
+};
+const createNavigationItemsTemplate = (filterDate) => {
+  const navigationItemTemplate = filterDate
+    .map((filter, index)=> createNavigationItemTemplateElem(filter, index === 0))
+    .join('');
+  return `<div class="main-navigation__items">${navigationItemTemplate}</div>`;
+};
+export default class NavigationItemsView {
+  #element = null;
+  #filterDate = null;
+  constructor(filterDate) {
+    this.#filterDate = filterDate;
+  }
+
+  get element() {
+    if(!this.#element) {
+      this.#element = createElement(this.template);
+    }
+    return this.#element;
+  }
+
+  get template() {
+    return createNavigationItemsTemplate( this.#filterDate);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
