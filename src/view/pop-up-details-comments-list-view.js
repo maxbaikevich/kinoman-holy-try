@@ -1,16 +1,17 @@
-import {createElement} from '../render';
-
-const createPopUpDetailsCommentListTemplate = () => (
-  ` <ul class="film-details__comments-list">
-    </ul>`
+import {createElement} from '../render.js';
+export const createPopUpDetailsCommentListTemplate = () => (
+  `<ul class="film-details__comments-list">
+   </ul>
+  `
 );
 export default class popUpDetailsCommentListView {
   #element = null;
+
   get element() {
     if(!this.#element) {
       this.#element = createElement(this.template);
     }
-    return this.#element;
+    return  this.#element;
   }
 
   get template() {
@@ -21,4 +22,5 @@ export default class popUpDetailsCommentListView {
     this.#element = null;
   }
 }
+
 

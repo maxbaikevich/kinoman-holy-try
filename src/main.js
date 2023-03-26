@@ -18,10 +18,10 @@ import PopUpDetailsControlsView from './view/pop-up-details-controls-view';
 import popUpDetailsControlsBtnView from './view/pop-up-details-controls-btn';
 import popUpDetailsBottomContainerView from './view/pop-up-details-bottom-container-view';
 import popUpDetailsCommentListView from './view/pop-up-details-comments-list-view';
-import {createNewCommentTemplate} from './view/pop-up-detail-new-comment-view';
-import {createEmojiListTemplate} from './view/pop-up-details-emoji-list-view';
-import {createPopUpFilmDetailsCommentItemTemplate} from './view/pop-up-details-comment-view';
-import {createCommentEmojiTemplate} from './view/pop-up-details-comment-emoji-view';
+import newCommentTemplateView from './view/pop-up-detail-new-comment-view';
+import emojiListTemplateView from './view/pop-up-details-emoji-list-view';
+import popUpFilmDetailsCommentItemView from './view/pop-up-details-comment-view';
+import {createCommentEmojiTemplate}  from './view/pop-up-details-comment-emoji-view';
 import {generateMovie} from './mock/movie';
 import {createComments} from './utils';
 import {generateFilter} from './utils';
@@ -109,18 +109,18 @@ for(let i = 0; i < detailsControlButton.length; i++) {
 }
 const detailsInnerContainer = bodyElement.querySelector('.film-details__inner');
 const commentListData = commentsListData(movie[0], comments);
+// console.log('commentListData', commentListData)
 renderElement(detailsInnerContainer, new popUpDetailsBottomContainerView(commentListData.length).element, RenderPosition.BEFOREEND);
 
 const commentsWrap  = detailsInnerContainer.querySelector('.film-details__comments-wrap');
-
 renderElement(commentsWrap, new popUpDetailsCommentListView().element, RenderPosition.BEFOREEND);
 const commentsList = commentsWrap.querySelector('.film-details__comments-list');
 for(let i=0; i < commentListData.length; i++) {
-  renderTemplate(commentsList,createPopUpFilmDetailsCommentItemTemplate(commentListData[i]), RenderPosition.BEFOREEND);
+  renderElement(commentsList, new popUpFilmDetailsCommentItemView(commentListData[i]).element, RenderPosition.BEFOREEND);
 }
-renderTemplate(commentsWrap, createNewCommentTemplate(), RenderPosition.BEFOREEND);
+renderElement(commentsWrap, new newCommentTemplateView().element, RenderPosition.BEFOREEND);
 const filmDetailsNewComment = commentsWrap.querySelector('.film-details__new-comment');
-renderTemplate(filmDetailsNewComment, createEmojiListTemplate(), RenderPosition.BEFOREEND);
+renderElement(filmDetailsNewComment, new emojiListTemplateView().element, RenderPosition.BEFOREEND);
 
 const emojiList = filmDetailsNewComment.querySelector('.film-details__emoji-list');
 for(let i = 0; i < commentEmoji.length; i++) {
