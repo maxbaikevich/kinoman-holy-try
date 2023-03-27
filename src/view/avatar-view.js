@@ -6,7 +6,7 @@ const createAvatarTemplate = () => (
 	</section>`
 );
 
-export default class AvatarmenuView {
+export default class AvatarMenuView {
   #element = null;
   get element() {
     if (!this.#element) {

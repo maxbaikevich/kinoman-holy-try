@@ -11,7 +11,7 @@ export const popUpContainerRenderTemplate = () => (
     </form>
   </section>`
 );
-export default class popUpContainerRenderView {
+export default class PopUpContainerRenderView {
   #element = null;
 
   get element() {
