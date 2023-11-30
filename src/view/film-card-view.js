@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstarctView from './abstract-view';
 import dayjs from 'dayjs';
 import {timeStempDuration} from '../utils';
 const LENGTH_DESCRIPTION = 140;
@@ -29,25 +29,14 @@ export const createFilmCardTemplate = (movie) => {
     </div>
   </article>`;
 };
-export default class FilmCardView {
-  #element = null;
+export default class FilmCardView extends AbstarctView{
   #movie = null;
   constructor(movie) {
+    super();
     this.#movie = movie;
-  }
-
-  get element() {
-    if(!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 
   get template() {
     return createFilmCardTemplate(this.#movie);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
